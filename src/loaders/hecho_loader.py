@@ -119,7 +119,7 @@ class HechoHospitalizacionesLoader:
         )
         
         # Seleccionar solo las columnas necesarias para la tabla de hechos
-        df_final = df[['IDClinica', 'IDFecha', 'IDPaciente', 'IDUbicacion', 'NumeroCasos', 'SourceFile']].copy()
+        df_final = df[['IDClinica', 'IDFecha', 'IDPaciente', 'IDUbicacion', 'NumeroCasos']].copy()
         
         # Agregar columnas que no tenemos datos (como NULL)
         df_final['IDHora'] = None

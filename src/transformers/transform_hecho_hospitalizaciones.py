@@ -40,11 +40,10 @@ class HechoHospitalizacionesTransformer:
                         'Localidad': None,
                         'CodigoLocalidad': None,
                         'EnfoqueDiferencial': None,
-                        'RegimenSeguridad': None,
+                        'RegimenSeguridadSocial': None,
                         'GrupoEtario': None,
                         'TipoEnfermedad': 'IRA General',
-                        'NumeroCasos': row['numero_casos'],
-                        'SourceFile': row['source_file']
+                        'NumeroCasos': row['numero_casos']
                     }
                     hechos_list.append(hecho)
             
@@ -53,19 +52,23 @@ class HechoHospitalizacionesTransformer:
                 df_neumonia = extracted_data['neumonia'].copy()
                 
                 for _, row in df_neumonia.iterrows():
+                    localidad = normalize_localidad(row['localidad'])
+                    # Agregar sufijo si no es None
+                    if localidad:
+                        localidad = f"{localidad}, Bogota, Colombia"
+                    
                     hecho = {
                         'Fecha': pd.Timestamp(year=row['anio'], month=1, day=1).date(),
                         'Anio': row['anio'],
                         'Sexo': normalize_sexo(row['sexo']),
                         'Migrante': row['migrante'],
-                        'Localidad': normalize_localidad(row['localidad']),
+                        'Localidad': localidad,
                         'CodigoLocalidad': row['codigo_localidad'],
                         'EnfoqueDiferencial': row['enfoque_diferencial'],
                         'RegimenSeguridadSocial': row['regimen_seguridad'],  # Nombre correcto de la columna
                         'GrupoEtario': 'Menores de 5 años',  # Default igual que en DimPaciente
                         'TipoEnfermedad': 'Neumonía',
-                        'NumeroCasos': 1,  # Cada fila es un caso
-                        'SourceFile': row['source_file']
+                        'NumeroCasos': 1  # Cada fila es un caso
                     }
                     hechos_list.append(hecho)
             
@@ -74,19 +77,23 @@ class HechoHospitalizacionesTransformer:
                 df_ira5 = extracted_data['ira5anos'].copy()
                 
                 for _, row in df_ira5.iterrows():
+                    localidad = normalize_localidad(row['localidad'])
+                    # Agregar sufijo si no es None
+                    if localidad:
+                        localidad = f"{localidad}, Bogota, Colombia"
+                    
                     hecho = {
                         'Fecha': pd.Timestamp(year=row['anio'], month=1, day=1).date(),
                         'Anio': row['anio'],
                         'Sexo': normalize_sexo(row['sexo']),
                         'Migrante': row['migrante'],
-                        'Localidad': normalize_localidad(row['localidad']),
+                        'Localidad': localidad,
                         'CodigoLocalidad': row['codigo_localidad'],
                         'EnfoqueDiferencial': row['enfoque_diferencial'],
                         'RegimenSeguridadSocial': row['regimen_seguridad'],  # Nombre correcto de la columna
                         'GrupoEtario': row['grupo_etario'],
                         'TipoEnfermedad': 'IRA',
-                        'NumeroCasos': 1,  # Cada fila es un caso
-                        'SourceFile': row['source_file']
+                        'NumeroCasos': 1  # Cada fila es un caso
                     }
                     hechos_list.append(hecho)
             
