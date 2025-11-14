@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# Environment variables
+.env
+.env.local
+
+# Logs
+logs/*.log
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Data (si no quieres subir los CSV)
+# data_raw/*.csv
+
+# Archivos muy grandes (>100MB)
+data_raw/*.zip
+data_raw/[IN] Datos Salud Ambiental 2025-2.zip
+
+# OS
+.DS_Store
+Thumbs.db
+
+# SQL Server
+*.bak
+*.mdf
+*.ldf
