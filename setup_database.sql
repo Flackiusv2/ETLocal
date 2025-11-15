@@ -37,14 +37,17 @@ CREATE TABLE dbo.DimFecha (
     Mes INT,
     Dia INT,
     NombreMes NVARCHAR(20),
-    Trimestre INT
+    Trimestre INT,
+    Bimestre INT
 );
 GO
 
 CREATE TABLE dbo.DimHora (
     IDHora INT IDENTITY(1,1) PRIMARY KEY,
-    Hora TIME,
-    HoraTexto NVARCHAR(20)
+    Hora INT,
+    RangoHorario NVARCHAR(20),
+    Periodo NVARCHAR(5),
+    HoraFormato NVARCHAR(10)
 );
 GO
 

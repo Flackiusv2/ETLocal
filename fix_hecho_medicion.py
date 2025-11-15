@@ -2,6 +2,15 @@
 Script para modificar HechoMedicionAmbiental según el modelo correcto
 """
 import pyodbc
+import sys
+import io
+
+# Configurar encoding para Windows PowerShell
+if sys.platform == 'win32':
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8')
+    else:
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 conn_string = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=localhost;DATABASE=DW_Salud;Trusted_Connection=yes;'
 

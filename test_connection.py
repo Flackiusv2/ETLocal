@@ -2,6 +2,15 @@
 Script de prueba para verificar la conexión a SQL Server
 """
 import sys
+import io
+
+# Configurar encoding para Windows PowerShell
+if sys.platform == 'win32':
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8')
+    else:
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
 sys.path.append('.')
 
 from config.db_config import db_config

@@ -9,7 +9,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
 from src.utils.logger import ETLLogger
-from src.utils.helpers import get_nombre_mes, get_trimestre
+from src.utils.helpers import get_nombre_mes, get_trimestre, get_bimestre
 
 class DimFechaTransformer:
     """Transformador para la dimensión de fechas"""
@@ -58,6 +58,7 @@ class DimFechaTransformer:
             # Agregar columnas calculadas
             self.df_dim_fecha['NombreMes'] = self.df_dim_fecha['Mes'].apply(get_nombre_mes)
             self.df_dim_fecha['Trimestre'] = self.df_dim_fecha['Mes'].apply(get_trimestre)
+            self.df_dim_fecha['Bimestre'] = self.df_dim_fecha['Mes'].apply(get_bimestre)
             
             self.logger.success(f"DimFecha transformada: {len(self.df_dim_fecha)} fechas generadas")
             return self.df_dim_fecha

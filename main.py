@@ -3,8 +3,16 @@ MAIN ETL - Data Warehouse Salud
 Script principal para ejecutar el proceso ETL completo
 """
 import sys
+import io
 from pathlib import Path
 from datetime import datetime
+
+# Configurar encoding para Windows PowerShell
+if sys.platform == 'win32':
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8')
+    else:
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # Agregar el directorio raíz al path
 sys.path.append(str(Path(__file__).parent))

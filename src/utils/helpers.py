@@ -93,3 +93,18 @@ def get_trimestre(mes):
         return 3
     else:
         return 4
+
+def get_bimestre(mes):
+    """Retorna el bimestre del año (1-6)"""
+    if mes in [1, 2]:
+        return 1
+    elif mes in [3, 4]:
+        return 2
+    elif mes in [5, 6]:
+        return 3
+    elif mes in [7, 8]:
+        return 4
+    elif mes in [9, 10]:
+        return 5
+    else:  # mes in [11, 12]
+        return 6
