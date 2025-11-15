@@ -15,6 +15,7 @@ from src.transformers.transform_dim_exposicion import DimExposicionTransformer
 from src.transformers.transform_dim_hora import DimHoraTransformer
 from src.transformers.transform_hecho_hospitalizaciones import HechoHospitalizacionesTransformer
 from src.transformers.transform_hecho_medicion import HechoMedicionAmbientalTransformer
+from src.transformers.transform_analisis_correlacion import AnalisisCorrelacionTransformer
 
 class MasterTransformer:
     """Orquestador para transformar todos los datos"""
@@ -75,6 +76,19 @@ class MasterTransformer:
             self.logger.info("\n8. Transformando HechoMedicionAmbiental...")
             transformer_mediciones = HechoMedicionAmbientalTransformer()
             self.transformed_data['hecho_medicion_ambiental'] = transformer_mediciones.transform(extracted_data)
+            
+            # 9. Transformar AnalisisCorrelacion (requiere dimensiones y hechos)
+            self.logger.info("\n9. Transformando AnalisisCorrelacion...")
+            transformer_analisis = AnalisisCorrelacionTransformer()
+            dim_data = {
+                'dim_fecha': self.transformed_data['dim_fecha'],
+                'dim_ubicacion': self.transformed_data['dim_ubicacion']
+            }
+            fact_data = {
+                'hecho_medicion': self.transformed_data['hecho_medicion_ambiental'],
+                'hecho_hospitalizacion': self.transformed_data['hecho_hospitalizaciones']
+            }
+            self.transformed_data['analisis_correlacion'] = transformer_analisis.transform(dim_data, fact_data)
             
             self.logger.end_process("TRANSFORMACIÓN DE TODAS LAS DIMENSIONES Y HECHOS", success=True)
             return self.transformed_data

@@ -88,6 +88,10 @@ def main():
         for table, rows in summary['hechos'].items():
             print(f"   ✓ {table:30} {rows:>10,} registros")
         
+        print("\n📊 ANÁLISIS CARGADOS:")
+        for table, rows in summary['analisis'].items():
+            print(f"   ✓ {table:30} {rows:>10,} registros")
+        
         print("\n" + "-"*70)
         print(f"   TOTAL REGISTROS CARGADOS:        {summary['total_registros']:>10,}")
         print("-"*70)

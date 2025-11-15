@@ -51,8 +51,35 @@ try:
             print(f"❌ {table:30} ERROR: {str(e)}")
             conn.rollback()
     
-    # PASO 2: Limpiar dimensiones
-    print("\nPASO 2: Limpiando tablas de DIMENSIONES...")
+    # PASO 2: Limpiar tablas de análisis
+    print("\nPASO 2: Limpiando tablas de ANÁLISIS...")
+    tables_analisis = ['AnalisisCorrelacion']
+    
+    for table in tables_analisis:
+        try:
+            # Verificar conteo antes
+            cursor.execute(f"SELECT COUNT(*) FROM dbo.{table}")
+            count_before = cursor.fetchone()[0]
+            
+            # Eliminar datos
+            cursor.execute(f"DELETE FROM dbo.{table}")
+            conn.commit()
+            
+            # Verificar conteo después
+            cursor.execute(f"SELECT COUNT(*) FROM dbo.{table}")
+            count_after = cursor.fetchone()[0]
+            
+            if count_after == 0:
+                print(f"✓ {table:30} limpiada ({count_before:,} → {count_after} registros)")
+            else:
+                print(f"⚠ {table:30} NO se limpió completamente ({count_before:,} → {count_after:,} registros)")
+                
+        except Exception as e:
+            print(f"❌ {table:30} ERROR: {str(e)}")
+            conn.rollback()
+    
+    # PASO 3: Limpiar dimensiones
+    print("\nPASO 3: Limpiando tablas de DIMENSIONES...")
     tables_dims = ['DimFecha', 'DimHora', 'DimClinica', 'DimPaciente', 'DimUbicacion', 'DimExposicion']
     
     for table in tables_dims:

@@ -115,10 +115,9 @@ class HechoMedicionAmbientalLoader:
             df_final = pd.DataFrame({
                 'IDFecha': df_fact['IDFecha'].astype(int),
                 'IDHora': df_fact['IDHora'].astype(int),
+                'Concentracion': df_fact['concentracion'],
                 'IDExposicion': df_fact['IDExposicion'].astype(int),
-                'IDUbicacion': df_fact['IDUbicacion'].astype(int),
-                'ValorCO': df_fact['CO'],
-                'ValorPM25': df_fact['PM25']
+                'IDUbicacion': df_fact['IDUbicacion'].astype(int)
             })
             
             # 5. Cargar a la base de datos

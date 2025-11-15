@@ -9,6 +9,7 @@ sys.path.append(str(Path(__file__).parent.parent.parent))
 from src.loaders.dimension_loader import DimensionLoader
 from src.loaders.hecho_loader import HechoHospitalizacionesLoader
 from src.loaders.hecho_medicion_loader import HechoMedicionAmbientalLoader
+from src.loaders.analisis_correlacion_loader import AnalisisCorrelacionLoader
 from src.utils.logger import ETLLogger
 
 class MasterLoader:
@@ -65,6 +66,23 @@ class MasterLoader:
                 'HechoMedicionAmbiental': hecho_medicion_rows
             }
             
+            # 3. Cargar tabla de análisis
+            self.logger.info("\n" + "="*60)
+            self.logger.info("PASO 3: CARGANDO ANÁLISIS")
+            self.logger.info("="*60)
+            
+            # Cargar AnalisisCorrelacion
+            self.logger.info("\nCargando AnalisisCorrelacion...")
+            analisis_loader = AnalisisCorrelacionLoader()
+            analisis_rows = analisis_loader.load(
+                transformed_data['analisis_correlacion'],
+                truncate
+            )
+            
+            self.results['analisis'] = {
+                'AnalisisCorrelacion': analisis_rows
+            }
+            
             self.logger.end_process("CARGA COMPLETA DEL DATA WAREHOUSE", success=True)
             return self.results
             
@@ -78,6 +96,7 @@ class MasterLoader:
         summary = {
             'dimensiones': {},
             'hechos': {},
+            'analisis': {},
             'total_registros': 0
         }
         
@@ -89,6 +108,11 @@ class MasterLoader:
         if 'hechos' in self.results:
             for table, rows in self.results['hechos'].items():
                 summary['hechos'][table] = rows
+                summary['total_registros'] += rows
+        
+        if 'analisis' in self.results:
+            for table, rows in self.results['analisis'].items():
+                summary['analisis'][table] = rows
                 summary['total_registros'] += rows
         
         return summary

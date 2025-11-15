@@ -72,8 +72,7 @@ class HechoMedicionAmbientalTransformer:
                         'hora': row['hora'],
                         'indicador': 'Monóxido de Carbono (CO)',
                         'localidad': localidad,
-                        'CO': row['CO'],
-                        'PM25': None,
+                        'concentracion': row['CO'],
                         'tipo_medicion': 'CO'
                     })
             
@@ -92,8 +91,7 @@ class HechoMedicionAmbientalTransformer:
                         'hora': row['hora'],
                         'indicador': 'Material Particulado PM2.5',
                         'localidad': localidad,
-                        'CO': None,
-                        'PM25': row['PM25'],
+                        'concentracion': row['PM25'],
                         'tipo_medicion': 'PM25'
                     })
             
@@ -103,13 +101,13 @@ class HechoMedicionAmbientalTransformer:
             # Crear DataFrame del hecho
             self.df_hecho = pd.DataFrame(records)
             
-            # Calcular totales
-            total_co = self.df_hecho[self.df_hecho['tipo_medicion'] == 'CO']['CO'].sum()
-            total_pm25 = self.df_hecho[self.df_hecho['tipo_medicion'] == 'PM25']['PM25'].sum()
+            # Estadísticas
+            total_co_records = self.df_hecho[self.df_hecho['tipo_medicion'] == 'CO'].shape[0]
+            total_pm25_records = self.df_hecho[self.df_hecho['tipo_medicion'] == 'PM25'].shape[0]
             
             self.logger.success(f"HechoMedicionAmbiental transformado: {len(self.df_hecho)} registros")
-            self.logger.info(f"Total mediciones CO: {self.df_hecho[self.df_hecho['tipo_medicion'] == 'CO'].shape[0]:,}")
-            self.logger.info(f"Total mediciones PM2.5: {self.df_hecho[self.df_hecho['tipo_medicion'] == 'PM25'].shape[0]:,}")
+            self.logger.info(f"Total mediciones CO: {total_co_records:,}")
+            self.logger.info(f"Total mediciones PM2.5: {total_pm25_records:,}")
             
             return self.df_hecho
             

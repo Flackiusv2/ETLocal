@@ -126,12 +126,27 @@ CREATE TABLE dbo.HechoMedicionAmbiental (
     IDMedicion BIGINT IDENTITY(1,1) PRIMARY KEY,
     IDFecha INT NOT NULL,
     IDHora INT NOT NULL,
-    IDEstacion INT NOT NULL,
-    ValorCO FLOAT NULL,
-    ValorPM25 FLOAT NULL,
+    Concentracion FLOAT NOT NULL,
+    IDExposicion INT NOT NULL,
+    IDUbicacion INT NOT NULL,
     CONSTRAINT FK_Med_Fecha FOREIGN KEY (IDFecha) REFERENCES dbo.DimFecha(IDFecha),
     CONSTRAINT FK_Med_Hora FOREIGN KEY (IDHora) REFERENCES dbo.DimHora(IDHora),
-    CONSTRAINT FK_Med_Estacion FOREIGN KEY (IDEstacion) REFERENCES dbo.DimEstacion(IDEstacion)
+    CONSTRAINT FK_Med_Exposicion FOREIGN KEY (IDExposicion) REFERENCES dbo.DimExposicion(IDExposicion),
+    CONSTRAINT FK_Med_Ubicacion FOREIGN KEY (IDUbicacion) REFERENCES dbo.DimUbicacion(IDUbicacion)
+);
+GO
+
+-- Tabla de Análisis: Correlación por Localidad-Bimestre
+CREATE TABLE dbo.AnalisisCorrelacion (
+    IDAnalisis INT IDENTITY(1,1) PRIMARY KEY,
+    CodigoLocalidad NVARCHAR(50) NOT NULL,
+    Anio INT NOT NULL,
+    Bimestre INT NOT NULL,
+    Concentracion_avg FLOAT,
+    NumMediciones INT,
+    Hospitalizaciones INT,
+    HospitalizacionRate FLOAT,
+    UNIQUE (CodigoLocalidad, Anio, Bimestre)
 );
 GO
 
