@@ -28,7 +28,7 @@ class AnalisisCorrelacionLoader:
         try:
             # Preparar DataFrame final
             df_final = pd.DataFrame({
-                'CodigoLocalidad': df_analisis['CodigoLocalidad'],
+                'Localidad': df_analisis['Localidad'],
                 'Anio': df_analisis['Anio'].astype(int),
                 'Bimestre': df_analisis['Bimestre'].astype(int),
                 'Concentracion_avg': df_analisis['Concentracion_avg'],

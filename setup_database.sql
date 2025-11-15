@@ -139,14 +139,14 @@ GO
 -- Tabla de Análisis: Correlación por Localidad-Bimestre
 CREATE TABLE dbo.AnalisisCorrelacion (
     IDAnalisis INT IDENTITY(1,1) PRIMARY KEY,
-    CodigoLocalidad NVARCHAR(50) NOT NULL,
+    Localidad NVARCHAR(150) NOT NULL,
     Anio INT NOT NULL,
     Bimestre INT NOT NULL,
     Concentracion_avg FLOAT,
     NumMediciones INT,
     Hospitalizaciones INT,
     HospitalizacionRate FLOAT,
-    UNIQUE (CodigoLocalidad, Anio, Bimestre)
+    UNIQUE (Localidad, Anio, Bimestre)
 );
 GO
 

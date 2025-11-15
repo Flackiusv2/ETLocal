@@ -38,7 +38,7 @@ class AnalisisCorrelacionTransformer:
             df_medicion_copy = df_medicion.copy()
             df_medicion_copy['fecha'] = pd.to_datetime(df_medicion_copy['fecha'])
             
-            # Necesitamos hacer merge con fecha y ubicación para obtener Bimestre y CodigoLocalidad
+            # Necesitamos hacer merge con fecha y ubicación para obtener Bimestre y Localidad
             df_med_enriquecido = df_medicion_copy.merge(
                 df_fecha[['Fecha', 'Anio', 'Bimestre']],
                 left_on='fecha',
@@ -51,19 +51,19 @@ class AnalisisCorrelacionTransformer:
                 how='left'
             )
             
-            # Agregar por CodigoLocalidad, Año, Bimestre
-            med_agg = df_med_enriquecido.groupby(['CodigoLocalidad', 'Anio', 'Bimestre']).agg({
+            # Agregar por Localidad, Año, Bimestre
+            med_agg = df_med_enriquecido.groupby(['Localidad', 'Anio', 'Bimestre']).agg({
                 'concentracion': 'mean',  # Promedio de concentración
                 'fecha': 'count'  # Número de mediciones
             }).reset_index()
             
-            med_agg.columns = ['CodigoLocalidad', 'Anio', 'Bimestre', 'Concentracion_avg', 'NumMediciones']
+            med_agg.columns = ['Localidad', 'Anio', 'Bimestre', 'Concentracion_avg', 'NumMediciones']
             
             # Agregar datos de hospitalizaciones
-            # HechoHospitalizaciones ya incluye CodigoLocalidad y Anio, solo necesitamos agregar Bimestre
+            # HechoHospitalizaciones ya incluye Localidad y CodigoLocalidad
             df_hospitalizacion_copy = df_hospitalizacion.copy()
             
-            # HechoHospitalizaciones ya tiene la columna 'Anio', solo necesitamos agregar Bimestre
+            # HechoHospitalizaciones ya tiene las columnas 'Localidad' y 'Anio', solo necesitamos agregar Bimestre
             # Primero, convertir Fecha a datetime si es necesario
             df_hospitalizacion_copy['Fecha'] = pd.to_datetime(df_hospitalizacion_copy['Fecha'])
             
@@ -75,17 +75,17 @@ class AnalisisCorrelacionTransformer:
                 how='left'
             )
             
-            # Agregar por CodigoLocalidad, Año (de df_hospitalizacion), Bimestre (de df_fecha)
-            hosp_agg = df_hosp_enriquecido.groupby(['CodigoLocalidad', 'Anio', 'Bimestre']).agg({
+            # Agregar por Localidad (ya existe en df_hospitalizacion), Año, Bimestre
+            hosp_agg = df_hosp_enriquecido.groupby(['Localidad', 'Anio', 'Bimestre']).agg({
                 'NumeroCasos': 'sum'  # Suma de hospitalizaciones
             }).reset_index()
             
-            hosp_agg.columns = ['CodigoLocalidad', 'Anio', 'Bimestre', 'Hospitalizaciones']
+            hosp_agg.columns = ['Localidad', 'Anio', 'Bimestre', 'Hospitalizaciones']
             
             # Combinar ambos agregados
             self.df_analisis = med_agg.merge(
                 hosp_agg,
-                on=['CodigoLocalidad', 'Anio', 'Bimestre'],
+                on=['Localidad', 'Anio', 'Bimestre'],
                 how='left'
             )
             
@@ -115,12 +115,12 @@ class AnalisisCorrelacionTransformer:
             # Eliminar la columna temporal TotalBogota
             self.df_analisis = self.df_analisis.drop(columns=['TotalBogota'])
             
-            # Remover filas sin CodigoLocalidad
-            self.df_analisis = self.df_analisis.dropna(subset=['CodigoLocalidad'])
+            # Remover filas sin Localidad
+            self.df_analisis = self.df_analisis.dropna(subset=['Localidad'])
             
             self.logger.success(f"AnalisisCorrelacion transformado: {len(self.df_analisis)} registros")
             self.logger.info(f"Rango de años: {self.df_analisis['Anio'].min()} - {self.df_analisis['Anio'].max()}")
-            self.logger.info(f"Localidades únicas: {self.df_analisis['CodigoLocalidad'].nunique()}")
+            self.logger.info(f"Localidades únicas: {self.df_analisis['Localidad'].nunique()}")
             
             return self.df_analisis
             
